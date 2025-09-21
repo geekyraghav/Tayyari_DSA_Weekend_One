@@ -103,4 +103,27 @@ public class OwnLinkedList {
         list.display();
         System.out.println(list.get(3));
     }
+    static boolean equalPartition(int arr[]) {
+        int totalSum = 0;
+        for(int ele : arr) totalSum += ele;
+        if(totalSum%2 != 0) return false;
+        int[][] dp = new int[arr.length][totalSum/2 + 1];
+        return helper(0,arr,totalSum/2,dp);
+    }
+
+    private static boolean helper(int i, int[] arr, int sum, int[][] dp) {
+        if(i==arr.length){
+            if(sum==0) return true;
+            else return false;
+        }
+        if(dp[i][sum]!=0) return (dp[i][sum]==1);
+        boolean skip = helper(i+1,arr,sum,dp);
+        if(sum < arr[i]){
+            dp[i][sum] = (skip) ? 1 : -1;
+            return skip;
+        }
+        boolean pick = helper(i+1,arr,sum-arr[i],dp);
+        dp[i][sum] = (skip || pick) ? 1 : -1;
+        return (pick || skip);
+    }
 }
